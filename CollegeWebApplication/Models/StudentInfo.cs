@@ -44,5 +44,8 @@ namespace CollegeWebApplication.Models
         public string PhoneNumber { get; set; }
         public string Stream { get; set; }
         public  string YearOfStudy { get; set; }
+
+      //  public DateTime? InsertDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
     }
 }

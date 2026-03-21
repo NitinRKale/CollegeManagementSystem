@@ -10,6 +10,7 @@
     <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
 <table class="table table-responsive table-striped">
+
     <thead>
         <tr>
             <th>
@@ -45,6 +46,8 @@
             <th></th>
         </tr>
     </thead>
+
+
     <tbody>
         @foreach (var item in Model)
         {
@@ -89,71 +92,3 @@
         }
     </tbody>
 </table>
-
-@* <table id="jqtblEmployee" class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Middle Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Birth Date</th>
-            <th>Gender</th>
-            <th>Phone Number</th>
-            <th>Address</th>
-            <th>Salary</th>
-            <th>Status</th>
-            <th>Department</th>
-            <th>Designation</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-
-@section Scripts {
-
-    <script>
-        $(document).ready(function () {
-            $('#jqtblEmployee').DataTable({
-                "ajax": {
-                    "url": "/Employee/GetEmployees",
-                    "type": "GET",
-                    "datatype": "json"
-                },
-                "columns": [
-                    { "data": "empFirstName" },
-                    { "data": "empLastName" },
-                    { "data": "emailId" },
-                    { "data": "birthDate" },
-                    { "data": "empGender" },
-                    { "data": "empPhoneNumber" },
-                    { "data": "salary" },
-                    { "data": "empStatus" },
-                    { "data": "department" },
-                    {
-                        "data": "empId",
-                        "render": function (data, type, row) {
-                            return `
-                                <a href="/Employee/Edit/${data}" class="btn btn-primary btn-sm">Edit</a>
-                                <a href="/Employee/Details/${data}" class="btn btn-info btn-sm">Details</a>
-                                <a href="/Employee/Delete/${data}" class="btn btn-danger btn-sm">Delete</a>
-                            `;
-                        },
-                        // "orderable": false,
-                        // "searchable": false,
-
-                        "paging": true,
-                        "lengthChange": false,
-                        "searching": true,
-                        "ordering": true,
-                        "info": true,
-                        "autoWidth": false,
-                        "responsive": true,
-                    }
-                ]
-            });
-        });
-    </script>
-} *@
