@@ -16,14 +16,58 @@ namespace CollegeWebApplication.Data
 
         public DbSet<CountryMaster> CountryMaster { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
+
+        public DbSet<StateMaster> StateMaster { get; set; }
+
+        public DbSet<CityMaster> CityMaster { get; set; }
+        public DbSet<CourseMaster> CourseMaster { get; set; }
+
+        public DbSet<StudentMaster> StudentMaster { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<StudentMaster>().Property<DateTime?>("CreateDate");
+            modelBuilder.Entity<StudentMaster>().Property<DateTime?>("UpdatedDate");
+        }
+
         public override int SaveChanges()
         {
+            ChangeTracker.DetectChanges();
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Property("CreateDate").CurrentValue = DateTime.UtcNow;
+                    //entry.Property("UpdatedDate").CurrentValue = DateTime.UtcNow; // ensure not MinValue
+                }
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Property("UpdatedDate").CurrentValue = DateTime.UtcNow;
+                }
+            }
+
             AddAuditLogs();
             return base.SaveChanges();
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            ChangeTracker.DetectChanges();
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Property("CreateDate").CurrentValue = DateTime.UtcNow;
+                }
+
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Property("UpdatedDate").CurrentValue = DateTime.UtcNow;
+                }
+            }
+
             AddAuditLogs();
             return base.SaveChangesAsync(cancellationToken);
         }

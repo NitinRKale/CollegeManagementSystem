@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CollegeWebApplication.Models.StudentMaster>
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "StudentList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="card card-success">
@@ -43,7 +43,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.EmailId)
                     </th>
-                    <th>
+                  @*   <th>
                         @Html.DisplayNameFor(model => model.Address)
                     </th>
                     <th>
@@ -54,7 +54,7 @@
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Pincode)
-                    </th>
+                    </th> *@
                     <th>
                         @Html.DisplayNameFor(model => model.CourseMaster)
                     </th>
@@ -89,7 +89,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.EmailId)
                         </td>
-                        <td>
+                       @*  <td>
                             @Html.DisplayFor(modelItem => item.Address)
                         </td>
                         <td>
@@ -100,7 +100,7 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Pincode)
-                        </td>
+                        </td> *@
                         <td>
                             @Html.DisplayFor(modelItem => item.CourseMaster.CourseName)
                         </td>
@@ -108,12 +108,12 @@
                             @Html.DisplayFor(modelItem => item.YearOfStudy)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.IsActive)
+                            @(item.IsActive ? "Active" : "Inactive")
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.StudentId">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.StudentId">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.StudentId">Delete</a>
+                            <a asp-action="Edit" class="btn btn-warning btn-sm" asp-route-id="@item.StudentId">Edit</a> |
+                            <a asp-action="Details" class="btn btn-info btn-sm" asp-route-id="@item.StudentId">Details</a> |
+                            <a asp-action="Delete" class="btn btn-danger btn-sm" asp-route-id="@item.StudentId">Delete</a>
                         </td>
                     </tr>
                 }
@@ -128,3 +128,5 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+

@@ -1,5 +1,7 @@
 using CollegeWebApplication.Data;
+using CollegeWebApplication.IRepository;
 using CollegeWebApplication.Models;
+using CollegeWebApplication.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +64,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+// Register your repository for DI
+
+////builder.Services.AddScoped<DepartmentRepository>();
+builder.Services.AddScoped<IStudentMasterEFRepository, StudentMasterEFRepository>();
+builder.Services.AddScoped<ICityMasterADORepository, CityMasterADORepository>();
+builder.Services.AddScoped<ICityMasterADOSPRepository, CityMasterADOSPRepository>();
 
 var app = builder.Build();
 
@@ -96,7 +104,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Student}/{action=Index}/{id?}")
+    pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 app.Run();

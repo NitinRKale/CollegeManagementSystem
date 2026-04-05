@@ -265,6 +265,78 @@
                             </ul>
                         </li>
                         <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon far fa-envelope"></i>
+                                <p>
+                                    Student EF
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Student EF Repo
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="StudentMasterEF" asp-action="Index">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>List</p>
+                                            </a>               
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="StudentMasterEF" asp-action="Create">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Add New</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon far fa-envelope"></i>
+                                <p>
+                                    City Master
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            City IQ Repo
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="CityMasterADOIQ" asp-action="Index">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>List</p>
+                                            </a>               
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="CityMasterADOIQ" asp-action="Create">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>Add New</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+
+
+                        <li class="nav-item">
                             <a href="pages/widgets.html" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
@@ -516,36 +588,7 @@
                                     Kanban Board
                                 </p>
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon far fa-envelope"></i>
-                                <p>
-                                    Mailbox
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="pages/mailbox/mailbox.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Inbox</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="pages/mailbox/compose.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Compose</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="pages/mailbox/read-mail.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Read</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        </li>           
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-book"></i>
@@ -1038,10 +1081,32 @@
           //Money Euro
           $('[data-mask]').inputmask()
 
-          //Date picker
-          $('#EmpBirthDate').datetimepicker({
-              format: 'L'
+                   // initialize the BirthDate picker used in CreateStudent/EditStudent
+          $('#BirthDatePicker').datetimepicker({
+            format: 'DD-MM-YYYY' // keep user-friendly display
           });
+
+          // Ensure datetimepicker-backed date strings are POSTed as ISO (yyyy-MM-dd)
+          // This runs for any form on the page before submit.
+          $(document).on('submit', 'form', function (e) {
+              try {
+                  var $form = $(this);
+                  var $birth = $form.find('input[name="BirthDate"]');
+                  if (!$birth.length) return; // nothing to do
+
+                  var val = $.trim($birth.val());
+                  if (!val) return;
+
+                  // try parsing with Moment using common formats
+                  var m = moment(val, ['DD-MM-YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD', moment.ISO_8601], true);
+                  if (m.isValid()) {
+                      $birth.val(m.format('YYYY-MM-DD'));
+                  }
+              } catch (ex) {
+                  console.error('BirthDate conversion error', ex);
+              }
+          });
+
 
           //Date picker
           $('#reservationdate').datetimepicker({
