@@ -1,10 +1,12 @@
-﻿using CollegeWebApplication.IRepository;
+﻿using CollegeWebApplication.Filters;
+using CollegeWebApplication.IRepository;
 using CollegeWebApplication.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CollegeWebApplication.Controllers
 {
+   // [CustomAuthorize("User,Admin,SuperAdmin")]
     public class StudentMasterEFController : Controller
     {
         private readonly IStudentMasterEFRepository _repository;

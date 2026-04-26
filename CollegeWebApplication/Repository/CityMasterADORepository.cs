@@ -25,7 +25,8 @@ namespace CollegeWebApplication.Repository
                 conn.ConnectionString = _connectionString;
 
                 SqlCommand cmd = new SqlCommand();
-               cmd.CommandText = "SELECT CM.CityId,CM.CityName,SM.StateName FROM CityMaster CM INNER JOIN StateMaster SM ON CM.StateId = SM.StateId";
+                string strQuery = "SELECT CM.CityId,CM.CityName,SM.StateName FROM CityMaster CM INNER JOIN StateMaster SM ON CM.StateId = SM.StateId";
+                cmd.CommandText = strQuery; //"SELECT CM.CityId,CM.CityName,SM.StateName FROM CityMaster CM INNER JOIN StateMaster SM ON CM.StateId = SM.StateId";
                 //cmd.CommandText = "SELECT * FROM CityMaster";
                 cmd.Connection = conn;
                 conn.Open();

@@ -1,4 +1,5 @@
 using CollegeWebApplication.Data;
+using CollegeWebApplication.Filters;
 using CollegeWebApplication.IRepository;
 using CollegeWebApplication.Models;
 using CollegeWebApplication.Repository;
@@ -20,8 +21,21 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
+//// Add services to the container.
+//// Register filter implementations so they can be used via AddMvc options (AddService)
+//builder.Services.AddScoped<CustomAuthorizationFilter>();
+//builder.Services.AddScoped<LoggingActionFilter>();
+//builder.Services.AddScoped<ResultLoggingFilter>();
+//builder.Services.AddScoped<GlobalExceptionFilter>();
+
 // Add services to the container.
-builder.Services.AddControllersWithViews()
+builder.Services.AddControllersWithViews(options =>
+{
+    //// Register filters globally (exception filter + action/result logging)
+    //options.Filters.AddService<GlobalExceptionFilter>();
+    //options.Filters.AddService<LoggingActionFilter>();
+    //options.Filters.AddService<ResultLoggingFilter>();
+})
    .AddJsonOptions(options =>
    {
        // A property naming policy, or null to leave property names unchanged.
@@ -68,8 +82,13 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 ////builder.Services.AddScoped<DepartmentRepository>();
 builder.Services.AddScoped<IStudentMasterEFRepository, StudentMasterEFRepository>();
+
 builder.Services.AddScoped<ICityMasterADORepository, CityMasterADORepository>();
 builder.Services.AddScoped<ICityMasterADOSPRepository, CityMasterADOSPRepository>();
+builder.Services.AddScoped<IStateMasterADORepository, StateMasterADORepository>();
+builder.Services.AddScoped<ICourseMasterADORepository, CourseMasterADORepository>();
+
+builder.Services.AddScoped<IStudentMasterADOSPRepository, StudentMasterADOSPRepository>();
 
 var app = builder.Build();
 
@@ -98,6 +117,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthorization();
 app.UseAuthorization();
 
 app.MapStaticAssets();

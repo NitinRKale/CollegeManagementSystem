@@ -4,13 +4,13 @@ namespace CollegeWebApplication.IRepository
 {
     public interface ICityMasterADOSPRepository
     {
-        IEnumerable<CityMaster> GetAllCitiesAsync();
+        IEnumerable<CityMaster> GetAllCities();
 
-        IEnumerable<CityMaster> GetCitiesByStateIdIdAsync(int stateId);
+        IEnumerable<CityMaster> GetCitiesByState(int stateId);
 
-        CityMaster GetCityByIdAsync(int cityId);
-        void AddCityAsync(CityMaster stateMaster);
-        void UpdateCityAsync(CityMaster stateMaster);
-        void DeleteCityAsync(int cityId);
+        CityMaster GetCityById(int cityId);
+        void AddCity(CityMaster stateMaster);
+        void UpdateCity(CityMaster stateMaster);
+        void DeleteCity(int cityId);
     }
 }

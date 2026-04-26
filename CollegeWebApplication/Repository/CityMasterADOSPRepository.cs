@@ -17,7 +17,7 @@ namespace CollegeWebApplication.Repository
             _connectionString = connectionString;
         }
 
-        public IEnumerable<CityMaster> GetAllCitiesAsync()
+        public IEnumerable<CityMaster> GetAllCities()
         {
             var cityList = new List<CityMaster>();
             using (var conn = new SqlConnection(_connectionString))
@@ -40,12 +40,12 @@ namespace CollegeWebApplication.Repository
             return cityList;
         }
 
-        public IEnumerable<CityMaster> GetCitiesByStateIdIdAsync(int stateId)
+        public IEnumerable<CityMaster> GetCitiesByState(int stateId)
         {
             var cityList = new List<CityMaster>();
             using (var conn = new SqlConnection(_connectionString))
             {
-                var cmd = new SqlCommand("GetCitiesByStateId", conn);
+                var cmd = new SqlCommand("usp_CityMaster_SelectByState", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@StateId", stateId);
                 conn.Open();
@@ -64,7 +64,7 @@ namespace CollegeWebApplication.Repository
             return cityList;
         }
 
-        public CityMaster GetCityByIdAsync(int cityId)
+        public CityMaster GetCityById(int cityId)
         {
             CityMaster cityMaster = null;           
             using (var conn = new SqlConnection(_connectionString))
@@ -91,7 +91,7 @@ namespace CollegeWebApplication.Repository
             return cityMaster;
         }
 
-        public void AddCityAsync(CityMaster cityMaster)
+        public void AddCity(CityMaster cityMaster)
         {
             using (var conn = new SqlConnection(_connectionString))
             {
@@ -105,7 +105,7 @@ namespace CollegeWebApplication.Repository
             }
         }
 
-        public void UpdateCityAsync(CityMaster cityMaster)
+        public void UpdateCity(CityMaster cityMaster)
         {
             using (var conn = new SqlConnection(_connectionString))
             {
@@ -120,7 +120,7 @@ namespace CollegeWebApplication.Repository
             }
         }
 
-        public void DeleteCityAsync(int cityId)
+        public void DeleteCity(int cityId)
         {
             using (var conn = new SqlConnection(_connectionString))
             {
@@ -133,6 +133,5 @@ namespace CollegeWebApplication.Repository
                 cmd.ExecuteNonQuery();
             }
         }
-
     }
 }

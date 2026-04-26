@@ -46,6 +46,7 @@ namespace CollegeWebApplication.Models
         [Display(Name = "State Name")]
         public int StateId { get; set; }
 
+        public string? StateName { get; set; }
         public StateMaster? StateMaster { get; set; }
 
         [ForeignKey("CityMaster")]
@@ -53,6 +54,7 @@ namespace CollegeWebApplication.Models
         [Display(Name = "City Name")]
         public int CityId { get; set; }
 
+        public string? CityName { get; set; }
         public CityMaster? CityMaster { get; set; }
 
         [Required(ErrorMessage = "Please enter valid pincode.")]
@@ -63,6 +65,8 @@ namespace CollegeWebApplication.Models
         [Required(ErrorMessage = "Please select course")]
         [Display(Name = "Course Name")]
         public int CourseId { get; set; }
+
+        public string? CourseName { get; set; }
 
         public CourseMaster? CourseMaster { get; set; }
 
