@@ -1,10 +1,56 @@
 using CollegeWebApplication.Data;
+using CollegeWebApplication.Filters;
+using CollegeWebApplication.IRepository;
+using CollegeWebApplication.Models;
+using CollegeWebApplication.Repository;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Ensure log folder exists (must match path in appsettings.json)
+Directory.CreateDirectory(@"E:\ApplicationLogs");
+
+// Configure Serilog from configuration
+// Configure Serilog from configuration with safe fallback
+try
+{
+    Log.Logger = new LoggerConfiguration()
+        .ReadFrom.Configuration(builder.Configuration)
+        .Enrich.FromLogContext()
+        .CreateLogger();
+}
+catch (Exception ex)
+{
+    // Fallback to file-only logger to avoid crashing on startup
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Warning()
+        .WriteTo.File(@"E:\ApplicationLogs\fallback-log.txt", rollingInterval: RollingInterval.Day)
+        .CreateLogger();
+
+    // write the initialization failure to the fallback file
+    Log.Logger.Error(ex, "Primary Serilog initialization failed (MSSqlServer sink).");
+}
+
+builder.Host.UseSerilog();
+
+//// Add services to the container.
+//// Register filter implementations so they can be used via AddMvc options (AddService)
+//builder.Services.AddScoped<CustomAuthorizationFilter>();
+//builder.Services.AddScoped<LoggingActionFilter>();
+//builder.Services.AddScoped<ResultLoggingFilter>();
+//builder.Services.AddScoped<GlobalExceptionFilter>();
+
 // Add services to the container.
-builder.Services.AddControllersWithViews()
+builder.Services.AddControllersWithViews(options =>
+{
+    //// Register filters globally (exception filter + action/result logging)
+    //options.Filters.AddService<GlobalExceptionFilter>();
+    //options.Filters.AddService<LoggingActionFilter>();
+    //options.Filters.AddService<ResultLoggingFilter>();
+})
    .AddJsonOptions(options =>
    {
        // A property naming policy, or null to leave property names unchanged.
@@ -16,7 +62,64 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddDbContext<CollegeWebDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CollegeConnection")));
 
+// Register Identity with ApplicationUser
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    // Configure identity options here if needed
+    options.Password.RequiredLength = 5; // Example: Set minimum password length to 5 characters
+    options.Password.RequireNonAlphanumeric = false; // Example: Disable requirement for non-alphanumeric characters
+})
+  .AddEntityFrameworkStores<CollegeWebDbContext>()
+  .AddDefaultTokenProviders();
+
+
+// Configure authentication cookie settings
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events = new CookieAuthenticationEvents
+    {
+        OnRedirectToLogin = context =>
+        {
+            // Handle redirect to login page when user is not authenticated
+            context.Response.Redirect("/Account/Login");
+            return Task.CompletedTask;
+        },
+        OnRedirectToAccessDenied = context =>
+        {
+            // Handle redirect to access denied page when user does not have permission
+            context.Response.Redirect("/Home/UnAuthorized");
+            return Task.CompletedTask;
+        }
+    };
+});
+
+// Register your repository for DI
+
+////builder.Services.AddScoped<DepartmentRepository>();
+builder.Services.AddScoped<IStudentMasterEFRepository, StudentMasterEFRepository>();
+
+builder.Services.AddScoped<ICityMasterADORepository, CityMasterADORepository>();
+builder.Services.AddScoped<ICityMasterADOSPRepository, CityMasterADOSPRepository>();
+builder.Services.AddScoped<IStateMasterADORepository, StateMasterADORepository>();
+builder.Services.AddScoped<ICourseMasterADORepository, CourseMasterADORepository>();
+
+builder.Services.AddScoped<IStudentMasterADOSPRepository, StudentMasterADOSPRepository>();
+
 var app = builder.Build();
+
+//seed Roles - Insert Roles into Role table
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    string[] roleNames = { "SuperAdmin", "Admin", "SuperUser", "User" }; // Define your roles here
+    foreach (var roleName in roleNames)
+    {
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -30,12 +133,13 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Student}/{action=Index}/{id?}")
+    pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 app.Run();

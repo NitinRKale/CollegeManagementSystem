@@ -1,0 +1,130 @@
+﻿@model CollegeWebApplication.Models.StudentMasterADO
+
+@{
+    ViewData["Title"] = "DeleteStudent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-success">
+    <div class="card-header">
+        <h3 class="card-title">Student Details</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <form asp-action="Delete">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="StudentId" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" disabled />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" disabled />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Gender" class="control-label">Gender</label>
+                        <input type="radio" class="radio radio-rounded" asp-for="Gender" value="Male" disabled /> Male
+                        <input type="radio" class="radio radio-rounded" asp-for="Gender" value="Female" disabled /> Female
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BirthDate" class="control-label"></label>
+                        <div class="input-group date" id="BirthDatePicker" data-target-input="nearest">
+                            <input asp-for="BirthDate" type="text" class="form-control datetimepicker-input"
+                                   data-target="#BirthDatePicker" disabled />
+                            <div class="input-group-append" data-target="#BirthDatePicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                        <span asp-validation-for="BirthDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="MobileNo" class="control-label"></label>
+                        <input asp-for="MobileNo" class="form-control" disabled />
+                        <span asp-validation-for="MobileNo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EmailId" class="control-label"></label>
+                        <input asp-for="EmailId" class="form-control" disabled />
+                        <span asp-validation-for="EmailId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input asp-for="Address" class="form-control" disabled />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </div>
+                <!-- /.col -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="StateId"></label>
+                        <select asp-for="StateId" asp-items="ViewBag.StateList" class="form-control" disabled></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="CityId"></label>
+                        <select asp-for="CityId" asp-items="ViewBag.CityList" class="form-control" disabled></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Pincode" class="control-label"></label>
+                        <input asp-for="Pincode" class="form-control" disabled />
+                        <span asp-validation-for="Pincode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CourseId"></label>
+                        <select asp-for="CourseId" asp-items="ViewBag.CourseList" class="form-control" disabled></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="YearOfStudy" class="control-label"></label>
+                        <select asp-for="YearOfStudy" class="form-control" disabled>
+                            <option value="">-- Select Year --</option>
+                            <option value="FY">FY</option>
+                            <option value="SY">SY</option>
+                            <option value="TY">TY</option>
+                        </select>
+                        <span asp-validation-for="YearOfStudy" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsActive" disabled /> @Html.DisplayNameFor(model => model.IsActive)
+                        </label>
+                    </div>
+
+                    <br />
+                    <div class="form-group">
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                        <a asp-action="Index" class="btn btn-info">Back to List</a>
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+        </form>
+        <!-- /.row -->
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="~/js/studentmasterefcontroller.js"></script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

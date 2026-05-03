@@ -1,159 +1,130 @@
-﻿@model IEnumerable<CollegeWebApplication.Models.StudentInfo>
+﻿@model IEnumerable<CollegeWebApplication.Models.StudentMaster>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="card card-success">
+    <div class="card-header">
+        <h3 class="card-title">Student List</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </p>
+        <table class="table table-responsive table-striped">
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
-<table class="table table-responsive table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateBirth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stream)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.YearOfStudy)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateBirth)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Gender)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.City)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Stream)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.YearOfStudy)
-                </td>
-                <td>
-                    <a asp-action="Edit" class="btn btn-primary" asp-route-id="@item.StudentId">Edit</a> |
-                    <a asp-action="Details" class="btn btn-info" asp-route-id="@item.StudentId">Details</a> |
-                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.StudentId">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-@* <table id="jqtblEmployee" class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Middle Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Birth Date</th>
-            <th>Gender</th>
-            <th>Phone Number</th>
-            <th>Address</th>
-            <th>Salary</th>
-            <th>Status</th>
-            <th>Department</th>
-            <th>Designation</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Gender)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BirthDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MobileNo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmailId)
+                    </th>
+                   @*  <th>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StateMaster)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CityMaster)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Pincode)
+                    </th> *@
+                    <th>
+                        @Html.DisplayNameFor(model => model.CourseMaster)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.YearOfStudy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Gender)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BirthDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MobileNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmailId)
+                        </td>
+@*                         <td>
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                       
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StateMaster.StateName)
+                        </td>                       
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CityMaster.CityName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Pincode)
+                        </td>   *@                     
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseMaster.CourseName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.YearOfStudy)
+                        </td>
+                        <td>
+                            @(item.IsActive ? "Active" : "Inactive")
+                        </td>
+                        <td>
+                            <a asp-action="Edit" class="btn btn-warning btn-sm" asp-route-id="@item.StudentId">Edit</a> |
+                            <a asp-action="Details" class="btn btn-info btn-sm" asp-route-id="@item.StudentId">Details</a> |
+                            <a asp-action="Delete" class="btn btn-danger btn-sm" asp-route-id="@item.StudentId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 @section Scripts {
-
-    <script>
-        $(document).ready(function () {
-            $('#jqtblEmployee').DataTable({
-                "ajax": {
-                    "url": "/Employee/GetEmployees",
-                    "type": "GET",
-                    "datatype": "json"
-                },
-                "columns": [
-                    { "data": "empFirstName" },
-                    { "data": "empLastName" },
-                    { "data": "emailId" },
-                    { "data": "birthDate" },
-                    { "data": "empGender" },
-                    { "data": "empPhoneNumber" },
-                    { "data": "salary" },
-                    { "data": "empStatus" },
-                    { "data": "department" },
-                    {
-                        "data": "empId",
-                        "render": function (data, type, row) {
-                            return `
-                                <a href="/Employee/Edit/${data}" class="btn btn-primary btn-sm">Edit</a>
-                                <a href="/Employee/Details/${data}" class="btn btn-info btn-sm">Details</a>
-                                <a href="/Employee/Delete/${data}" class="btn btn-danger btn-sm">Delete</a>
-                            `;
-                        },
-                        // "orderable": false,
-                        // "searchable": false,
-
-                        "paging": true,
-                        "lengthChange": false,
-                        "searching": true,
-                        "ordering": true,
-                        "info": true,
-                        "autoWidth": false,
-                        "responsive": true,
-                    }
-                ]
-            });
-        });
-    </script>
-} *@
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
