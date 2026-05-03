@@ -18,9 +18,9 @@ namespace CollegeWebApplication.Repository
                 throw new InvalidOperationException("Connection string 'CollegeConnection' not found.");
             _connectionString = connectionString;
         }
-        public IEnumerable<StudentMaster> GetAllStudentMasters()
+        public IEnumerable<StudentMasterADO> GetAllStudentMasters()
         {
-            List<StudentMaster> studentMasters = new List<StudentMaster>();
+            List<StudentMasterADO> studentMasters = new List<StudentMasterADO>();
             using (SqlConnection conn = new SqlConnection())
             {
                 conn.ConnectionString = _connectionString;
@@ -34,7 +34,7 @@ namespace CollegeWebApplication.Repository
                 {
                     while (reader.Read())
                     {
-                        studentMasters.Add(new StudentMaster
+                        studentMasters.Add(new StudentMasterADO
                         {
                             StudentId  = (int)reader["StudentId"],
                             FirstName  = reader["FirstName"]?.ToString() ?? string.Empty,
@@ -49,7 +49,7 @@ namespace CollegeWebApplication.Repository
                             Pincode = reader["Pincode"]?.ToString() ?? string.Empty,
                             CourseName = reader["CourseName"]?.ToString() ?? string.Empty,
                             YearOfStudy = reader["YearOfStudy"]?.ToString() ?? string.Empty,
-                            IsActive  = (bool)reader["IsActive"]
+                            IsActive  = reader["IsActive"] != DBNull.Value && (bool)reader["IsActive"]
                         });
                     }
                 }
@@ -57,9 +57,9 @@ namespace CollegeWebApplication.Repository
             return studentMasters;
         }
 
-        public StudentMaster GetStudentMasterById(int studentId)
+        public StudentMasterADO GetStudentMasterById(int studentId)
         {
-            var studentMaster = new StudentMaster();
+            var studentMaster = new StudentMasterADO();
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 SqlCommand cmd = new SqlCommand();
@@ -74,7 +74,7 @@ namespace CollegeWebApplication.Repository
                 {
                     while (reader.Read())
                     {
-                        studentMaster = new StudentMaster
+                        studentMaster = new StudentMasterADO
                         {
                             StudentId = reader["StudentId"] != DBNull.Value ? (int)reader["StudentId"] : 0,
                             FirstName = reader["FirstName"]?.ToString() ?? string.Empty,
@@ -100,8 +100,7 @@ namespace CollegeWebApplication.Repository
             return studentMaster;
         }
 
-
-        public Task<string> AddStudentMaster(StudentMaster studentMaster)
+        public Task<string> AddStudentMaster(StudentMasterADO studentMaster)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -141,7 +140,7 @@ namespace CollegeWebApplication.Repository
             }
         }
 
-        public Task<string> UpdateStudentMaster(StudentMaster studentMaster)
+        public Task<string> UpdateStudentMaster(StudentMasterADO studentMaster)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

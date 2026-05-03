@@ -1,6 +1,9 @@
 ﻿using CollegeWebApplication.Data;
 using CollegeWebApplication.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 
 namespace CollegeWebApplication.Controllers
 {
@@ -19,35 +22,52 @@ namespace CollegeWebApplication.Controllers
         public IActionResult Index()
         {
             _logger.LogInformation("Index requested - listing students");
-            var students = _context.StudentsInfo.ToList();
+            var students = _context.StudentMaster
+                .Include(st => st.StateMaster)
+                .Include(st => st.CityMaster)
+                .Include(st => st.CourseMaster)
+                .ToList();
+            // Include navigation properties if they exist on the model
+
+            //var students = _context.Set<StudentMaster>()
+            //    .AsNoTracking()
+            //    .Include(sm => sm.StateMaster)
+            //    .Include(sm => sm.CityMaster)
+            //    .Include(sm => sm.CourseMaster)
+            //    .ToList();
+
             _logger.LogInformation("Index returning {Count} students", students.Count);
             return View("StudentList", students);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+
+            ViewBag.States = await _context.StateMaster.ToListAsync();
+            ViewBag.Courses = await _context.CourseMaster.ToListAsync();
+
             _logger.LogInformation("Create GET requested");
             return View();
         }
 
 
         [HttpPost]
-        public IActionResult Create(StudentInfo student)
+        public async Task<IActionResult> Create(StudentMaster student)
         {
             _logger.LogInformation("Create POST requested for student {@Student}", student);
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.StudentsInfo.Add(student);
-                    _context.SaveChanges();
-                    _logger.LogInformation("Student created with id {Id}", 0);
+                    await _context.StudentMaster.AddAsync(student);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Student created with id {Id}", student.StudentId);
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error while creating student {@Student}", 0);
+                    _logger.LogError(ex, "Error while creating student {@Student}", student);
                     ModelState.AddModelError(string.Empty, "An error occurred while saving the student.");
                 }
             }
@@ -55,30 +75,42 @@ namespace CollegeWebApplication.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             _logger.LogInformation("Edit GET requested for id {Id}", id);
-            var student = _context.StudentsInfo.Find(id);
+            
+            var student = await _context.StudentMaster.FindAsync(id);
+
             if (student == null)
             {
-                _logger.LogWarning("Edit GET - student not found for id {Id}", id);
+                _logger.LogWarning("Details - student not found for id {Id}", id);
                 return RedirectToAction("Index");
             }
+
+            // Use SelectList so tag helpers will select the current value automatically
+            ViewBag.StateList = new SelectList(
+                await _context.StateMaster.ToListAsync(), "StateId", "StateName", student.StateId);
+
+            ViewBag.CityList = new SelectList(
+                await _context.CityMaster.Where(x => x.StateId == student.StateId).ToListAsync(), "CityId", "CityName", student.CityId);
+
+            ViewBag.CourseList = new SelectList(
+                await _context.CourseMaster.ToListAsync(), "CourseId", "CourseName", student.CourseId);
+
             return View(student);
         }
 
         [HttpPost]
-        public IActionResult Edit(StudentInfo student)
+        public async Task<IActionResult> Edit(StudentMaster student)
         {
             _logger.LogInformation("Edit POST requested for student {@Student}", student);
             if (ModelState.IsValid)
             {
                 try
-                {
-                    student.UpdateDate = DateTime.Now;
-                    _context.StudentsInfo.Update(student);
-                    _context.SaveChanges();
-                    _logger.LogInformation("Student updated with id {Id}", 0);
+                {                    
+                    _context.StudentMaster.Update(student);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Student updated with id {Id}", student.StudentId);
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -91,42 +123,65 @@ namespace CollegeWebApplication.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var student = _context.StudentsInfo.Find(id);
+            var student = await _context.StudentMaster.FindAsync(id);
             if (student == null)
             {
                 _logger.LogWarning("Details - student not found for id {Id}", id);
                 return RedirectToAction("Index");
             }
+
+            // Use SelectList so tag helpers will select the current value automatically
+            ViewBag.StateList = new SelectList(
+                await _context.StateMaster.ToListAsync(), "StateId", "StateName", student.StateId);
+
+            ViewBag.CityList = new SelectList(
+                await _context.CityMaster.Where(x => x.StateId == student.StateId).ToListAsync(), "CityId", "CityName", student.CityId);
+
+            ViewBag.CourseList = new SelectList(
+                await _context.CourseMaster.ToListAsync(), "CourseId", "CourseName", student.CourseId);
+
             return View(student);
         }
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             _logger.LogInformation("Delete GET requested for id {Id}", id);
-            var student = _context.StudentsInfo.Find(id);
+            var student = await _context.StudentMaster.FindAsync(id);
             if (student == null)
             {
                 _logger.LogWarning("Delete GET - student not found for id {Id}", id);
                 return RedirectToAction("Index");
             }
+
+            // Use SelectList so tag helpers will select the current value automatically
+            ViewBag.StateList = new SelectList(
+                await _context.StateMaster.ToListAsync(), "StateId", "StateName", student.StateId);
+
+            ViewBag.CityList = new SelectList(
+                await _context.CityMaster.Where(x => x.StateId == student.StateId).ToListAsync(), "CityId", "CityName", student.CityId);
+
+            ViewBag.CourseList = new SelectList(
+                await _context.CourseMaster.ToListAsync(), "CourseId", "CourseName", student.CourseId);
+
+
             return View(student);
         }
 
         [HttpPost]
         [ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             _logger.LogInformation("Delete POST requested for id {Id}", id);
             try
             {
-                var student = _context.StudentsInfo.Find(id);
+                var student = await _context.StudentMaster.FindAsync(id);
                 if (student != null)
                 {
-                    _context.StudentsInfo.Remove(student);
-                    _context.SaveChanges();
+                    _context.StudentMaster.Remove(student);
+                    await _context.SaveChangesAsync();
                     _logger.LogInformation("Student deleted with id {Id}", id);
                 }
                 else
@@ -140,5 +195,21 @@ namespace CollegeWebApplication.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetCities(int stateId)
+        {
+            try
+            {
+                var cities = await _context.CityMaster.Where(x=> x.StateId == stateId).ToListAsync() ?? new List<CityMaster>();
+                return Json(cities);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error getting cities for stateId {StateId}", stateId);
+                return Json(new List<CityMaster>());
+            }
+        }
+
     }
 }

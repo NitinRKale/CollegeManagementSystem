@@ -14,10 +14,25 @@ var builder = WebApplication.CreateBuilder(args);
 Directory.CreateDirectory(@"E:\ApplicationLogs");
 
 // Configure Serilog from configuration
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .CreateLogger();
+// Configure Serilog from configuration with safe fallback
+try
+{
+    Log.Logger = new LoggerConfiguration()
+        .ReadFrom.Configuration(builder.Configuration)
+        .Enrich.FromLogContext()
+        .CreateLogger();
+}
+catch (Exception ex)
+{
+    // Fallback to file-only logger to avoid crashing on startup
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Warning()
+        .WriteTo.File(@"E:\ApplicationLogs\fallback-log.txt", rollingInterval: RollingInterval.Day)
+        .CreateLogger();
+
+    // write the initialization failure to the fallback file
+    Log.Logger.Error(ex, "Primary Serilog initialization failed (MSSqlServer sink).");
+}
 
 builder.Host.UseSerilog();
 

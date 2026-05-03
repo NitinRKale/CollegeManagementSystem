@@ -1,35 +1,25 @@
 ﻿using CollegeWebApplication.IRepository;
 using CollegeWebApplication.Models;
-using CollegeWebApplication.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Mono.TextTemplating;
-using NuGet.Protocol.Core.Types;
 
 namespace CollegeWebApplication.Controllers
 {
-    public class StudentMasterADOController : Controller
+    public class StudentMasterADOController(IStudentMasterADOSPRepository studentMasterADOSPRepository,
+             IStateMasterADORepository stateMasterADORepository,
+             ICityMasterADOSPRepository cityMasterADOSPRepository,
+             ICourseMasterADORepository courseMasterADORepository) : Controller
     {
-       private readonly IStudentMasterADOSPRepository _studentRepo;
-       private readonly IStateMasterADORepository _stateRepo;
-       private readonly ICityMasterADOSPRepository _cityRepo;
-       private readonly ICourseMasterADORepository _courseRepo;
+       private readonly IStudentMasterADOSPRepository _studentRepo = studentMasterADOSPRepository;
+       private readonly IStateMasterADORepository _stateRepo = stateMasterADORepository;
+       private readonly ICityMasterADOSPRepository _cityRepo = cityMasterADOSPRepository;
+       private readonly ICourseMasterADORepository _courseRepo = courseMasterADORepository;
        private readonly ILogger<StudentMasterEFController> _logger;
-       public StudentMasterADOController(IStudentMasterADOSPRepository studentMasterADOSPRepository,
-                IStateMasterADORepository stateMasterADORepository,
-                ICityMasterADOSPRepository cityMasterADOSPRepository,
-                ICourseMasterADORepository courseMasterADORepository)
-       {
-            _studentRepo = studentMasterADOSPRepository;
-            _stateRepo = stateMasterADORepository;
-            _cityRepo = cityMasterADOSPRepository;
-            _courseRepo = courseMasterADORepository;
-       }
 
         [HttpGet]
         public IActionResult Index()
         {
-            IEnumerable<StudentMaster> studentMasters = (IEnumerable<StudentMaster>)_studentRepo.GetAllStudentMasters();
+            IEnumerable<StudentMasterADO> studentMasters = (IEnumerable<StudentMasterADO>)_studentRepo.GetAllStudentMasters();
             if (studentMasters.Any())
             {
                 return View("StudentList", studentMasters);
@@ -49,7 +39,7 @@ namespace CollegeWebApplication.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(StudentMaster model)
+        public async Task<IActionResult> Create(StudentMasterADO model)
         {
             if (!ModelState.IsValid) return View("CreateStudent", model);
 
@@ -90,7 +80,7 @@ namespace CollegeWebApplication.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(StudentMaster model)
+        public async Task<IActionResult> Edit(StudentMasterADO model)
         {
             if (!ModelState.IsValid) return View(model);
 

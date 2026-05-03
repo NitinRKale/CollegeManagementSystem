@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace CollegeWebApplication.Models
 {
-    public class StudentMaster
+    public class StudentMasterADO
     {
         [Key]
         public int StudentId { get; set; }
@@ -46,14 +45,14 @@ namespace CollegeWebApplication.Models
         [Display(Name = "State Name")]
         public int StateId { get; set; }
 
-        public StateMaster? StateMaster { get; set; }
+        public string? StateName { get; set; }
 
         [ForeignKey("CityMaster")]
         [Required(ErrorMessage = "Please select city")]
         [Display(Name = "City Name")]
         public int CityId { get; set; }
 
-        public CityMaster? CityMaster { get; set; }
+        public string? CityName { get; set; }
 
         [Required(ErrorMessage = "Please enter valid pincode.")]
         [Display(Name = "Student Pincode")]
@@ -64,7 +63,8 @@ namespace CollegeWebApplication.Models
         [Display(Name = "Course Name")]
         public int CourseId { get; set; }
 
-        public CourseMaster? CourseMaster { get; set; }
+        public string? CourseName { get; set; }
+
 
         [Required(ErrorMessage = "Please select academic year.")]
         [Display(Name = "Academic Year")]
@@ -73,9 +73,5 @@ namespace CollegeWebApplication.Models
         [Required(ErrorMessage = "Please select student status")]
         [Display(Name = "IsActive")]
         public bool IsActive { get; set; }
-
-        //public DateTime? CreateDate { get; set; } = DateTime.Now;
-
-        //public DateTime? UpdatedDate { get; set; }
     }
 }

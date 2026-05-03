@@ -37,8 +37,8 @@ namespace CollegeWebApplication.Repository
                         cityList.Add(new CityMaster
                         {
                             CityId = (int)reader["CityId"],
-                            CityName = reader["CityName"]?.ToString() ?? string.Empty,
-                            StateName = reader["StateName"]?.ToString() ?? string.Empty
+                            CityName = reader["CityName"]?.ToString() ?? string.Empty
+                            //StateName = reader["StateName"]?.ToString() ?? string.Empty
                         });
                     }
                 }

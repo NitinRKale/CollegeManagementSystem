@@ -1,13 +1,13 @@
-﻿@model CollegeWebApplication.Models.StudentMaster
+﻿@model CollegeWebApplication.Models.StudentMasterADO
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "EditStudent";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="card card-success">
     <div class="card-header">
-        <h3 class="card-title">Student Details</h3>
+        <h3 class="card-title">Edit Student Information</h3>
 
         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -20,32 +20,32 @@
     </div>
     <!-- /.card-header -->
     <div class="card-body">
-        <form asp-action="Delete">
+        <form>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="StudentId" />
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="FirstName" class="control-label"></label>
-                        <input asp-for="FirstName" class="form-control" disabled />
+                        <input asp-for="FirstName" class="form-control" />
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="LastName" class="control-label"></label>
-                        <input asp-for="LastName" class="form-control" disabled />
+                        <input asp-for="LastName" class="form-control" />
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Gender" class="control-label">Gender</label>
-                        <input type="radio" class="radio radio-rounded" asp-for="Gender" value="Male" disabled /> Male
-                        <input type="radio" class="radio radio-rounded" asp-for="Gender" value="Female" disabled /> Female
+                        <input type="radio" class="radio radio-rounded" asp-for="Gender" value="Male" /> Male
+                        <input type="radio" class="radio radio-rounded" asp-for="Gender" value="Female" /> Female
                         <span asp-validation-for="Gender" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="BirthDate" class="control-label"></label>
                         <div class="input-group date" id="BirthDatePicker" data-target-input="nearest">
                             <input asp-for="BirthDate" type="text" class="form-control datetimepicker-input"
-                                   data-target="#BirthDatePicker" disabled />
+                                   data-target="#BirthDatePicker" />
                             <div class="input-group-append" data-target="#BirthDatePicker" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
@@ -55,17 +55,17 @@
 
                     <div class="form-group">
                         <label asp-for="MobileNo" class="control-label"></label>
-                        <input asp-for="MobileNo" class="form-control" disabled />
+                        <input asp-for="MobileNo" class="form-control" />
                         <span asp-validation-for="MobileNo" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="EmailId" class="control-label"></label>
-                        <input asp-for="EmailId" class="form-control" disabled />
+                        <input asp-for="EmailId" class="form-control" />
                         <span asp-validation-for="EmailId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Address" class="control-label"></label>
-                        <input asp-for="Address" class="form-control" disabled />
+                        <input asp-for="Address" class="form-control" />
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
                 </div>
@@ -73,27 +73,27 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="StateId"></label>
-                        <select asp-for="StateId" asp-items="ViewBag.StateList" class="form-control" disabled></select>
+                        <select asp-for="StateId" asp-items="ViewBag.StateList" class="form-control"></select>
                     </div>
 
                     <div class="form-group">
                         <label asp-for="CityId"></label>
-                        <select asp-for="CityId" asp-items="ViewBag.CityList" class="form-control" disabled></select>
+                        <select asp-for="CityId" asp-items="ViewBag.CityList" class="form-control"></select>
                     </div>
 
                     <div class="form-group">
                         <label asp-for="Pincode" class="control-label"></label>
-                        <input asp-for="Pincode" class="form-control" disabled />
+                        <input asp-for="Pincode" class="form-control" />
                         <span asp-validation-for="Pincode" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="CourseId"></label>
-                        <select asp-for="CourseId" asp-items="ViewBag.CourseList" class="form-control" disabled></select>
+                        <select asp-for="CourseId" asp-items="ViewBag.CourseList" class="form-control"></select>
                     </div>
 
                     <div class="form-group">
                         <label asp-for="YearOfStudy" class="control-label"></label>
-                        <select asp-for="YearOfStudy" class="form-control" disabled>
+                        <select asp-for="YearOfStudy" class="form-control">
                             <option value="">-- Select Year --</option>
                             <option value="FY">FY</option>
                             <option value="SY">SY</option>
@@ -103,13 +103,13 @@
                     </div>
                     <div class="form-group form-check">
                         <label class="form-check-label">
-                            <input class="form-check-input" asp-for="IsActive" disabled /> @Html.DisplayNameFor(model => model.IsActive)
+                            <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
                         </label>
                     </div>
 
                     <br />
                     <div class="form-group">
-                        <input type="submit" value="Delete" class="btn btn-danger" />
+                        <input type="submit" id="btnUpdate" value="Update" class="btn btn-primary" />
                         <a asp-action="Index" class="btn btn-info">Back to List</a>
                     </div>
                 </div>
@@ -122,9 +122,11 @@
 
 @section Scripts {
 
-    <script src="~/js/studentmasterefcontroller.js"></script>
+    <script src="~/js/StudentMasterADOAjaxController.js"></script>
 
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+

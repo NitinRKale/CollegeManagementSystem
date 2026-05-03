@@ -16,7 +16,7 @@ namespace CollegeWebApplication.Models
         [Display(Name = "State")]
         public int StateId { get; set; }
 
-        public string ? StateName { get; set; }
+       // public string ? StateName { get; set; }
 
         public StateMaster? StateMaster { get; set; }
     }

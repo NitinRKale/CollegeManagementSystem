@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewData["Title"] = "CityList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-success">
+    <div class="card-header">
+        <h3 class="card-title">City List</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </p>
+
+        <div class="table-responsive">
+            <table id="jqtblCity" class="table table-bordered table-hover" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>City Name</th>
+                        <th>State Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <style>
+        /* prevent wrapping so horizontal scrollbar appears instead */
+        #jqtblCity th,
+        #jqtblCity td {
+            white-space: nowrap;
+        }
+
+        /* ensure datatable wrapper uses full width */
+        .dataTables_wrapper {
+            width: 100%;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            $('#jqtblCity').DataTable({
+                "ajax": {
+                    "url": "/CityMasterADOAjax/GetAllCities",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "CityName" },
+                    { "data": "StateName" },
+                    { "data": "IsActive" },
+                    {
+                        "data": "CityId",
+                        "render": function (data, type, row) {
+                            return `
+                                <a href="/StudentMasterADOAjax/Edit/${data}" class="btn btn-primary btn-sm">Edit</a>
+                                <a href="/StudentMasterADOAjax/Details/${data}" class="btn btn-info btn-sm">Details</a>
+                                <a href="/StudentMasterADOAjax/Delete/${data}" class="btn btn-danger btn-sm">Delete</a>
+                            `;
+                        },
+                        "paging": true,
+                        "lengthChange": false,
+                        "searching": true,
+                        "ordering": true,
+                        "info": true,
+                        "autoWidth": false,
+                        "responsive": false,  // turn off responsive column collapsing
+                        "scrollX": true       // enable horizontal scrolling
+                    }
+                ]
+            });
+        });
+    </script>
+}

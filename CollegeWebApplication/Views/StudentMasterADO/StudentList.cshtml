@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CollegeWebApplication.Models.StudentMaster>
+﻿@model IEnumerable<CollegeWebApplication.Models.StudentMasterADO>
 @{
     ViewData["Title"] = "StudentList";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -56,7 +56,7 @@
                         @Html.DisplayNameFor(model => model.Pincode)
                     </th> *@
                     <th>
-                        @Html.DisplayNameFor(model => model.CourseMaster)
+                        @Html.DisplayNameFor(model => model.CourseName)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.YearOfStudy)

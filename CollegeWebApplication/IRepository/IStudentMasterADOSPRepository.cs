@@ -4,14 +4,10 @@ namespace CollegeWebApplication.IRepository
 {
     public interface IStudentMasterADOSPRepository
     {
-        IEnumerable<StudentMaster> GetAllStudentMasters();
-        StudentMaster GetStudentMasterById(int id);
-        Task<string> AddStudentMaster(StudentMaster studentMaster);
-        Task<string> UpdateStudentMaster(StudentMaster studentMaster);
+        IEnumerable<StudentMasterADO> GetAllStudentMasters();
+        StudentMasterADO GetStudentMasterById(int id);
+        Task<string> AddStudentMaster(StudentMasterADO studentMaster);
+        Task<string> UpdateStudentMaster(StudentMasterADO studentMaster);
         Task<string> DeleteStudentMaster(int id);
-
-        //Task<List<StateMaster>> GetAllStateAsync();
-        //Task<List<CityMaster>> GetAllCityAsync(int stateId);
-        //Task<List<CourseMaster>> GetAllCourseAsync();
     }
 }

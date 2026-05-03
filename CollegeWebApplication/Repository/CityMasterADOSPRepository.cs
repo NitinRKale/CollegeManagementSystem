@@ -22,7 +22,7 @@ namespace CollegeWebApplication.Repository
             var cityList = new List<CityMaster>();
             using (var conn = new SqlConnection(_connectionString))
             {
-                var cmd = new SqlCommand("GetAllCities", conn);
+                var cmd = new SqlCommand("usp_CityMaster_SelectAll", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 conn.Open();
                 using (var reader = cmd.ExecuteReader())
@@ -32,7 +32,9 @@ namespace CollegeWebApplication.Repository
                         cityList.Add(new CityMaster
                         {
                             CityId = (int)reader["CityId"],
-                            CityName = reader["CityName"]?.ToString() ?? string.Empty
+                            CityName = reader["CityName"]?.ToString() ?? string.Empty,
+                            StateId = (int)reader["StateId"]
+                            //StateName = reader["StateName"]?.ToString() ?? string.Empty,
                         });
                     }
                 }
@@ -56,7 +58,9 @@ namespace CollegeWebApplication.Repository
                         cityList.Add(new CityMaster
                         {
                             CityId = (int)reader["CityId"],
-                            CityName = reader["CityName"]?.ToString() ?? string.Empty
+                            CityName = reader["CityName"]?.ToString() ?? string.Empty,
+                            StateId = (int)reader["StateId"]
+                            //StateName = reader["StateName"]?.ToString() ?? string.Empty,
                         });
                     }
                 }
@@ -83,7 +87,9 @@ namespace CollegeWebApplication.Repository
                         cityMaster = new CityMaster
                         {
                             CityId = (int)reader["CityId"],
-                            CityName = reader["CityName"]?.ToString() ?? string.Empty                             
+                            CityName = reader["CityName"]?.ToString() ?? string.Empty,
+                            StateId = (int)reader["StateId"]
+                            //StateName = reader["StateName"]?.ToString() ?? string.Empty,
                         };
                     }
                 }
